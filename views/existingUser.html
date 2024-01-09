@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Konto już istnieje</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+    }
+
+    h2 {
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <h2 id="existingUserMessage">Konto przypisane do tego IP już istnieje dla użytkownika: <span id="usernamePlaceholder"></span></h2>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const username = urlParams.get('username');
+    const usernamePlaceholder = document.getElementById('usernamePlaceholder');
+    if (username) {
+      usernamePlaceholder.textContent = username;
+    }
+  </script>
+</body>
+</html>

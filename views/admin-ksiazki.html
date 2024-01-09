@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Zarządzanie Książkami</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      text-align: center;
+      padding-top: 50px;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    #bookList {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    #bookList div {
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 10px;
+      margin: 10px;
+      width: 250px;
+      background-color: #fff;
+    }
+
+    #backButton2 {
+      padding: 10px 20px;
+      background-color: #ff0000;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      margin-top: 10px;
+    }
+
+    
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    img {
+      width: 100px;
+      height: 100px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Zarządzanie Książkami</h1>
+  <div id="bookList"></div>
+  <button onclick="openAddBookModal()">Dodaj nową książkę</button><br>
+  <button id="backButton2" onclick="window.location.href = '/'">Wróć na stronę główną</button>
+
+  <div id="myModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="document.getElementById('myModal').style.display='none'">&times;</span>
+    </div>
+  </div>
+
+  <div id="addBookModal" class="modal" style="display: none;">
+    <div class="modal-content">
+      <span class="close" onclick="document.getElementById('addBookModal').style.display='none'">&times;</span>
+      <input type="text" id="logoInput" placeholder="Logo książki"><br><br>
+      <input type="text" id="nazwaInput" placeholder="Nazwa książki"><br><br>
+      <input type="text" id="autorInput" placeholder="Autor książki"><br><br>
+      <textarea id="opisInput" placeholder="Opis książki" rows="4" cols="50"></textarea><br><br>
+      <input type="text" id="liczbaStronInput" placeholder="Liczba stron"><br><br>
+      <button onclick="submitBook()">Dodaj książkę</button>
+    </div>
+  </div>
+
+  <script>
+ function addBook() {
+      const book = {
+        logo: prompt("Proszę podać logo książki:"),
+        nazwa: prompt("Proszę podać nazwę książki:"),
+        autor: prompt("Proszę podać autora książki:"),
+        opis: prompt("Proszę podać opis książki:"),
+        liczbaStron: prompt("Proszę podać liczbę stron książki:")
+      };
+      fetch('/addBook', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(book)
+      })
+      .then(response => {
+        location.reload(); // Odśwież stronę po dodaniu książki
+      })
+      .catch(error => console.error('Błąd podczas dodawania książki:', error));
+    }
+
+    function deleteBook(bookId) {
+      fetch(`/deleteBook/${bookId}`, {
+        method: 'DELETE'
+      })
+      .then(response => {
+        location.reload(); // Odśwież stronę po usunięciu książki
+      })
+      .catch(error => console.error('Błąd podczas usuwania książki:', error));
+    }
+
+    // Pobranie listy książek z serwera
+    fetch('/getBooksFromDB')
+      .then(response => response.json())
+      .then(books => {
+        const bookListDiv = document.getElementById('bookList');
+        books.forEach(book => {
+          const bookDiv = document.createElement('div');
+          bookDiv.innerHTML = `
+            <img src="${book.logo}" alt="Logo książki" style="width:100px;height:100px;">
+            <p>Nazwa: ${book.nazwa}</p>
+            <p>Autor: ${book.autor}</p>
+            <p>Opis: ${book.opis}</p>
+            <p>Liczba Stron: ${book.liczbaStron}</p>
+            <button onclick="deleteBook('${book.id}')">Usuń</button>
+          `;
+          bookListDiv.appendChild(bookDiv);
+        });
+      })
+      .catch(error => console.error('Błąd podczas pobierania listy książek:', error));
+
+      function submitBook() {
+      const logo = document.getElementById('logoInput').value;
+      const nazwa = document.getElementById('nazwaInput').value;
+      const autor = document.getElementById('autorInput').value;
+      const opis = document.getElementById('opisInput').value;
+      const liczbaStron = document.getElementById('liczbaStronInput').value;
+
+      const book = { logo, nazwa, autor, opis, liczbaStron };
+
+      fetch('/addBook', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(book)
+      })
+      .then(response => {
+        location.reload(); // Odśwież stronę po dodaniu książki
+      })
+      .catch(error => console.error('Błąd podczas dodawania książki:', error));
+
+      closeModal(document.getElementById('addBookModal'));
+    }
+
+    // Modal
+    const modal = document.getElementById('myModal');
+    const addBookModal = document.getElementById('addBookModal');
+
+    function openAddBookModal() {
+      addBookModal.style.display = 'block';
+    }
+
+    function closeModal(modalElement) {
+      modalElement.style.display = 'none';
+    }
+
+    window.onclick = function(event) {
+      if (event.target === modal) {
+        modal.style.display = 'none';
+      }
+    }
+  </script>
+</body>
+</html>

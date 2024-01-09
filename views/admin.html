@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Błąd logowania</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+    }
+
+    h2 {
+      color: #333;
+    }
+
+    #errorMessage {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    #backButton {
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #backButton2 {
+      padding: 10px 20px;
+      background-color: #ff0000;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #backButton:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <div id="errorMessage">Wybierz prawidłową akcję</div>
+  <button id="backButton" onclick="window.location.href = '/admin/ksiazki'">Zarządzaj książkami</button><br>
+  <button id="backButton" onclick="window.location.href = '/admin/wypozyczone'">Zarządzaj wypożyczeniami</button><br>
+  <button id="backButton2" onclick="window.location.href = '/'">Wróc na stronę główną</button>
+</body>
+</html>

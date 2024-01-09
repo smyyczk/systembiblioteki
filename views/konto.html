@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Moje Konto</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      text-align: center;
+      padding-top: 50px;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    #userData {
+      margin: 20px 0;
+    }
+
+    #userData p {
+      font-size: 18px;
+      margin: 5px;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <h1>Moje Konto</h1>
+  <div id="userData"></div>
+  <button id="backButton" onclick="window.location.href = '/'">Wróć na stronę główną</button>
+  <script>
+    window.onload = function() {
+      fetch('/getUserDataFromDB') // Zapytanie do serwera o dane użytkownika z bazy danych
+        .then(response => response.json())
+        .then(data => {
+          const userDataDiv = document.getElementById('userData');
+          userDataDiv.innerHTML = `
+            <p>Imię i Nazwisko: ${data.imieinazwisko}</p>
+            <p>Nick: ${data.username}</p>
+            <p>Data Urodzenia: ${data.dataurodzenia}</p> 
+          `;
+        })
+        .catch(error => console.error('Błąd podczas pobierania danych:', error));
+    };
+  </script>
+</body>
+</html>

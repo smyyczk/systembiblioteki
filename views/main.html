@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Witaj!</title>
+  <style>
+    body {
+      background-color: #f2f2f2;
+      font-family: Arial, sans-serif;
+    }
+    #welcome {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      color: #333;
+      font-size: 20px;
+    }
+    #center {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
+    #options {
+      margin-top: 30px;
+    }
+    #options p {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+    #options button {
+      padding: 10px 20px;
+      margin: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s, color 0.3s;
+      background-color: #4CAF50;
+      color: #fff;
+    }
+    #options button2 {
+      padding: 10px 20px;
+      margin: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s, color 0.3s;
+      background-color: #ff0000;
+      color: #fff;
+    }
+    #options button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <div id="welcome"></div>
+  <div id="center">
+    <h1>Witaj w systemie e-biblioteki</h1>
+    <div id="options">
+      <p>Wybierz jedną z opcji, by przejść do serwisu</p>
+      <button onclick="window.location.href='/konto'">Moje konto</button>
+      <button onclick="window.location.href='/konto/wypozycone-ksiazki'">Zobacz twoje wypożyczone książki</button>
+      <button onclick="window.location.href='/biblioteka/dostepne-ksiazki'">Dostępne książki w bibliotece</button>
+      <button onclick="window.location.href='/biblioteka/ogloszenia'">Ogłoszenia</button>
+      <button2 onclick="window.location.href='/logout'">Wyloguj się</button2>
+      <button onclick="window.location.href='/admin'">Panel Administratora (TYLKO DLA ADMINISTRATORÓW)</button>
+    </div>
+  </div>
+
+  <script>
+    window.onload = function() {
+      fetch('/userData') // Zapytanie do serwera o dane użytkownika
+        .then(response => response.json())
+        .then(data => {
+          const welcomeDiv = document.getElementById('welcome');
+          const now = new Date();
+          const timeDiv = document.createElement('div');
+          timeDiv.innerHTML = `<p>${now.toLocaleString()}</p>`;
+          welcomeDiv.innerHTML = `<p>Witaj ${data.imieinazwisko}!</p>`;
+          welcomeDiv.appendChild(timeDiv);
+        })
+        .catch(error => console.error('Błąd podczas pobierania danych:', error));
+    };
+
+  </script>
+</body>
+</html>

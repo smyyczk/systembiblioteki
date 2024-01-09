@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Logowanie i rejestracja</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      text-align: center;
+      padding-top: 100px;
+    }
+
+    h2 {
+      color: #333;
+    }
+
+    form {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 20px;
+      border: 1px solid #ddd;
+      background-color: #fff;
+    }
+
+    input[type="text"], input[type="password"] {
+      width: 250px;
+      padding: 10px;
+      margin: 5px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+
+    button {
+      padding: 10px 20px;
+      color: #fff;
+      background-color: #4CAF50;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <h2>Logowanie</h2>
+  <form action="/login" method="post">
+    <input type="text" name="username" placeholder="Nazwa użytkownika" required><br><br>
+    <input type="password" name="password" placeholder="Hasło" required><br><br>
+    <button type="submit">Zaloguj</button>
+  </form>
+  <h2>Rejestracja</h2>
+  <form action="/register" method="post">
+    <input type="text" name="imieinazwisko" placeholder="Imię i Nazwisko" required><br><br>
+    <P>Data urodzenia</P>
+    <input type="date" name="dataurodzenia" placeholder="Data Urodzenia" required><br><br>
+    <input type="text" name="username" placeholder="Nazwa użytkownika" required><br><br>
+    <input type="password" name="password" placeholder="Hasło" required><br><br>
+    <button type="submit">Zarejestruj</button>
+  </form>
+</body>
+</html>

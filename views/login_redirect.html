@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Zalogowano pozytywnie</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+    }
+
+    h2 {
+      color: #333;
+    }
+
+    #redirectMessage {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div id="redirectMessage">Zalogowano pozytywnie. Za chwilę zostaniesz przekierowany na stronę główną.</div>
+  <div id="countdown">3</div>
+
+  <script>
+    let count = 3;
+    const countdown = document.getElementById('countdown');
+    const interval = setInterval(() => {
+      count--;
+      countdown.textContent = count;
+      if (count === 0) {
+        clearInterval(interval);
+        window.location.replace("/main");
+      }
+    }, 1000);
+  </script>
+</body>
+</html>

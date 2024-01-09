@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Wypożycz Książkę</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      text-align: center;
+      padding-top: 50px;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    #borrowForm {
+      margin: 20px 0;
+    }
+
+    #borrowForm label {
+      display: block;
+      margin-bottom: 5px;
+      color: #333;
+    }
+
+    #borrowForm input[type="text"] {
+      padding: 8px;
+      margin-bottom: 15px;
+      width: 200px;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+    }
+
+    #borrowForm input[type="submit"] {
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    #borrowForm input[type="submit"]:hover {
+      background-color: #45a049;
+    }
+
+    #borrowedBooks {
+      margin-top: 20px;
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    #borrowedBooks th, #borrowedBooks td {
+      border: 1px solid #ddd;
+      padding: 8px;
+    }
+
+    #borrowedBooks th {
+      background-color: #f2f2f2;
+    }
+
+    #borrowedBooks tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    #borrowedBooks tr:hover {
+      background-color: #ddd;
+    }
+
+    #borrowedBooks button {
+      padding: 6px 10px;
+      background-color: #f44336;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    #borrowedBooks button:hover {
+      background-color: #da190b;
+    }
+  </style>
+</head>
+<body>
+  <h1>Wypożycz Książkę</h1>
+  <form id="borrowForm">
+    <label for="imieinazwisko">Imię i Nazwisko:</label><br>
+    <input type="text" id="imieinazwisko" name="imieinazwisko"><br>
+    <label for="tytul">Tytuł Książki:</label><br>
+    <input type="text" id="tytul" name="tytul"><br>
+    <label for="data_wypozyczenia">Data Wypożyczenia:</label><br>
+    <input type="text" id="data_wypozyczenia" name="data_wypozyczenia"><br>
+    <label for="data_oddania">Data Oddania:</label><br>
+    <input type="text" id="data_oddania" name="data_oddania"><br><br>
+    <input type="submit" value="Wypożycz">
+  </form>
+
+  <table id="borrowedBooks">
+    <tr>
+      <th>Imię i Nazwisko</th>
+      <th>Tytuł Książki</th>
+      <th>Data Wypożyczenia</th>
+      <th>Data Oddania</th>
+      <th>Akcja</th>
+    </tr>
+  </table>
+
+  <script>
+    // Kod skryptu (bez przykładowego wiersza)
+    const borrowForm = document.getElementById('borrowForm');
+
+    borrowForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const formData = new FormData(borrowForm);
+      const data = Object.fromEntries(formData);
+
+      fetch('/borrowBook', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+      .then(response => response.text())
+      .then(result => {
+    console.log(result);
+    window.location.reload(); // Odświeżanie strony po dodaniu wypożyczenia
+  })
+      .catch(error => console.error('Błąd:', error));
+    });
+
+    fetch('/getBorrowedBooksFromDB')
+      .then(response => response.json())
+      .then(borrowedBooks => {
+        const borrowedBooksTable = document.getElementById('borrowedBooks');
+        borrowedBooks.forEach(borrow => {
+          const row = borrowedBooksTable.insertRow(-1);
+          const imieNazwiskoCell = row.insertCell(0);
+          const tytulCell = row.insertCell(1);
+          const dataWypozyczeniaCell = row.insertCell(2);
+          const dataOddaniaCell = row.insertCell(3);
+          const actionCell = row.insertCell(4);
+
+          imieNazwiskoCell.innerHTML = borrow.imieinazwisko;
+          tytulCell.innerHTML = borrow.tytul;
+          dataWypozyczeniaCell.innerHTML = borrow.data_wypozyczenia;
+          dataOddaniaCell.innerHTML = borrow.data_oddania;
+          actionCell.innerHTML = `<button onclick="deleteBorrow('${borrow.id}')">Usuń</button>`;
+        });
+      })
+      .catch(error => console.error('Błąd podczas pobierania wypożyczonych książek:', error));
+
+      function deleteBorrow(id) {
+  fetch(`/deleteBorrow/${id}`, {
+    method: 'DELETE'
+  })
+  .then(response => response.text())
+  .then(result => {
+    console.log(result);
+    window.location.reload(); // Dodano instrukcję do odświeżania strony
+  })
+  .catch(error => console.error('Błąd:', error));
+}
+  </script>
+</body>
+</html>
